@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Set up a Development Environment
+
+1. Clone this repository into your computer.
+
+2. Make sure you have Node.js and npm installed in your computer if you plan to work on the development of the UI.
+
+3. Navigate inside the ```complaint-system``` directory and run the command ```npm install``` to install node modules and set up a development environment.
+
 ## Available Scripts
 
 In the project directory, you can run:
