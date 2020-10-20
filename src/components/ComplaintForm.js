@@ -14,12 +14,13 @@ class ComplaintForm extends Component
         console.log("Form submitted. Please delete this line in final submission.");
 
         var request = {
-            query: document.getElementById("complaint")
+            query: document.getElementById("complaint").value
         };
 
         fetch("/predict",
             {
                 method: "POST",
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(request)
             }
         )
