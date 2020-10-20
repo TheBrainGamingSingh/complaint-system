@@ -2,14 +2,60 @@ import React, { Component } from "react";
 
 class ComplaintForm extends Component
 {
+    state = {
+        prediction: "",
+        confidence: 0,
+        showState: false
+    }
+
     handleFormSubmit = (e) =>
     {
         e.preventDefault();
-        console.log("Form submitted.");
+        console.log("Form submitted. Please delete this line in final submission.");
+
+        var request = {
+            query: document.getElementById("complaint")
+        };
+
+        fetch("/predict",
+            {
+                method: "POST",
+                body: JSON.stringify(request)
+            }
+        )
+        .then(res => res.json())
+        .then(
+            res =>
+            {
+                this.setState(
+                    {
+                        prediction: res.prediction,
+                        confidence: res.confidence
+                    }
+                );
+                console.log(res);
+            }
+        );
     }
 
     render()
     {
+        var displayOutput;
+
+        if(this.state.showState)
+        {
+            displayOutput = (
+                <div className = "center">
+                    Prediction: {this.state.prediction}<br />
+                    Confidence: {this.state.confidence}
+                </div>
+            );
+        }
+        else
+        {
+            displayOutput = null;
+        }
+
         return(
             <div className = "container center">
                 <h3>Complaint Form</h3>
@@ -42,6 +88,7 @@ class ComplaintForm extends Component
                     </div>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Submit Complaint</button>
                 </form>
+                <displayOutput />
             </div>
         );
     }
