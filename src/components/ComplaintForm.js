@@ -11,13 +11,14 @@ class ComplaintForm extends Component
     handleFormSubmit = (e) =>
     {
         e.preventDefault();
-        console.log("Form submitted. Please delete this line in final submission.");
 
         var request = {
-            query: document.getElementById("complaint")
+            query: document.getElementById("complaint").value
         };
 
-        fetch("/predict",
+        console.log(request);
+
+        fetch("/api/predict",
             {
                 method: "POST",
                 body: JSON.stringify(request)
