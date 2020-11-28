@@ -29,8 +29,6 @@ class ComplaintForm extends Component
             query: document.getElementById("complaint").value
         };
 
-        console.log(request);
-
         fetch("/predict",
             {
                 method: "POST",
