@@ -8,7 +8,6 @@ const App = () =>
     <div>
       <Navbar />
       <ComplaintForm />
-      <p>My Token = {window.token} (this line to be removed once development complete)</p>
     </div>
   );
 }

@@ -3,10 +3,23 @@ import React, { Component } from "react";
 class ComplaintForm extends Component
 {
     state = {
-        prediction: "",
-        confidence: 0,
-        showState: false
-    }
+        predictions: [],
+        showState: false,
+        categories: [
+            ["Encroachment", "follow_the_signs"],
+            ["Water Supply", "water_damage"],
+            ["Electrical", "electrical_services"],
+            ["Stray Animals", "pets"],
+            ["Roads", "add_road"],
+            ["Gardens" , "local_florist"],
+            ["Traffic", "traffic"],
+            ["Property Tax", "monetization_on"],
+            ["Health", "local_hospital"],
+            ["Building Permission", "location_city"],
+            ["Drainage", "waves"],
+            ["Garbage", "delete"]
+        ]
+    };
 
     handleFormSubmit = (e) =>
     {
@@ -18,7 +31,7 @@ class ComplaintForm extends Component
 
         console.log(request);
 
-        fetch("/api/predict",
+        fetch("/predict",
             {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
@@ -31,8 +44,8 @@ class ComplaintForm extends Component
             {
                 this.setState(
                     {
-                        prediction: res.prediction,
-                        confidence: res.confidence
+                        predictions: res.labels,
+                        showState: true
                     }
                 );
                 console.log(res);
@@ -42,15 +55,33 @@ class ComplaintForm extends Component
 
     render()
     {
+        var allIcons = this.state.categories.map(
+            category =>
+            {
+                return (<span><i className="medium material-icons">{category[1]}</i> {category[0]}<br /></span>);
+            }
+        );
+
         var displayOutput;
 
         if(this.state.showState)
         {
-            displayOutput = (
-                <div className = "center">
-                    Prediction: {this.state.prediction}<br />
-                    Confidence: {this.state.confidence}
-                </div>
+            displayOutput = this.state.predictions.map(
+                label =>
+                {
+                    var confidence = label.confidence*100;
+                    return(
+                        <div className="col s4">
+                            <div className="card z-depth-3 darken-1">
+                                <ul className="card-content collection with-header">
+                                    <li className = "collection-item center"><i className = "material-icons medium">{this.state.categories[label.id][1]}</i></li>
+                                    <li className="card-title collection-header center">{label.category}</li>
+                                    <li className = "collection-item center">Confidence: {Math.round((confidence + Number.EPSILON)*100)/100}%</li>
+                                </ul>
+                            </div>
+                        </div>
+                    );
+                }  
             );
         }
         else
@@ -90,7 +121,13 @@ class ComplaintForm extends Component
                     </div>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Submit Complaint</button>
                 </form>
-                <displayOutput />
+                <br />
+                <br />
+                <br />
+                
+                <div className="row">
+                    {displayOutput}
+                </div>
             </div>
         );
     }

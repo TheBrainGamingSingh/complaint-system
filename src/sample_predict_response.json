@@ -1,0 +1,22 @@
+{
+    "text_query": "very frequent power cuts",
+    "prediction": "Electrical",
+    "confidence": 0.8835,
+    "labels": [
+        {
+            "id": 2,
+            "category": "Electrical",
+            "confidence": 0.8835283308033317
+        },
+        {
+            "id": 5,
+            "category": "Garden",
+            "confidence": 0.08336988365844443
+        },
+        {
+            "id": 11,
+            "category": "Garbage",
+            "confidence": 0.01386592267774733
+        }
+    ]
+}
