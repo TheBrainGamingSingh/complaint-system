@@ -29,11 +29,10 @@ class ComplaintForm extends Component
             query: document.getElementById("complaint").value
         };
 
-        console.log(request);
-
         fetch("/predict",
             {
                 method: "POST",
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(request)
             }
         )
