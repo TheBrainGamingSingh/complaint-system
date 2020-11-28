@@ -6,18 +6,18 @@ class ComplaintForm extends Component
         predictions: [],
         showState: false,
         categories: [
-            ["Encroachment", "follow_the_signs"],
-            ["Water Supply", "water_damage"],
-            ["Electrical", "electrical_services"],
             ["Stray Animals", "pets"],
-            ["Roads", "add_road"],
+            ["Electrical", "electrical_services"],
             ["Gardens" , "local_florist"],
+            ["Roads", "add_road"],
+            ["Building Permission", "location_city"],
+            ["Water Supply", "water_damage"],
+            ["Encroachment", "follow_the_signs"],
+            ["Drainage", "waves"],
             ["Traffic", "traffic"],
             ["Property Tax", "monetization_on"],
-            ["Health", "local_hospital"],
-            ["Building Permission", "location_city"],
-            ["Drainage", "waves"],
-            ["Garbage", "delete"]
+            ["Garbage", "delete"],
+            ["Health", "local_hospital"]
         ]
     };
 
