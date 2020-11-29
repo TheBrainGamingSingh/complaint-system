@@ -6,18 +6,18 @@ class ComplaintForm extends Component
         predictions: [],
         showState: false,
         categories: [
-            ["Stray Animals", "pets"],
-            ["Electrical", "electrical_services"],
-            ["Gardens" , "local_florist"],
-            ["Roads", "add_road"],
-            ["Building Permission", "location_city"],
-            ["Water Supply", "water_damage"],
-            ["Encroachment", "follow_the_signs"],
-            ["Drainage", "waves"],
-            ["Traffic", "traffic"],
-            ["Property Tax", "monetization_on"],
-            ["Garbage", "delete"],
-            ["Health", "local_hospital"]
+            ["Stray Animals", "pets", "iconorange"],
+            ["Electrical", "electrical_services", "iconcyansus"],
+            ["Gardens" , "local_florist", "iconyellow"],
+            ["Roads", "add_road", "iconmagenta"],
+            ["Building Permission", "location_city", "iconpurple"],
+            ["Water Supply", "water_damage", "iconblue"],
+            ["Encroachment", "follow_the_signs", "icondarkerorange"],
+            ["Drainage", "waves", "iconviolet"],
+            ["Traffic", "traffic", "iconred"],
+            ["Property Tax", "monetization_on", "iconlightgreen"],
+            ["Garbage", "delete", "icongrey"],
+            ["Health", "local_hospital", "icongreen"]
         ]
     };
 
@@ -51,6 +51,17 @@ class ComplaintForm extends Component
         );
     }
 
+    handleButton = () =>
+    {
+        this.setState(
+            {
+                predictions: [],
+                showState: false
+            }
+        );
+
+    }
+
     render()
     {
         var allIcons = this.state.categories.map(
@@ -72,7 +83,7 @@ class ComplaintForm extends Component
                         <div className="col s4">
                             <div className="card z-depth-3 darken-1">
                                 <ul className="card-content collection with-header">
-                                    <li className = "collection-item center"><i className = "material-icons medium">{this.state.categories[label.id][1]}</i></li>
+                                    <li className = "collection-item center"><i className = {"material-icons medium " + this.state.categories[label.id][2]}>{this.state.categories[label.id][1]}</i></li>
                                     <li className="card-title collection-header center">{label.category}</li>
                                     <li className = "collection-item center">Confidence: {Math.round((confidence + Number.EPSILON)*100)/100}%</li>
                                 </ul>
@@ -89,6 +100,8 @@ class ComplaintForm extends Component
 
         return(
             <div className = "container center">
+                {!this.state.showState && (
+                <div>
                 <h3>Complaint Form</h3>
                 <form onSubmit = {this.handleFormSubmit}>
                     <div className = "row container">
@@ -119,6 +132,8 @@ class ComplaintForm extends Component
                     </div>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Submit Complaint</button>
                 </form>
+                </div>
+                )}
                 <br />
                 <br />
                 <br />
@@ -126,6 +141,9 @@ class ComplaintForm extends Component
                 <div className="row">
                     {displayOutput}
                 </div>
+                {this.state.showState && (
+                   <button class="btn waves-effect waves-light" onClick={this.handleButton}>Submit another Complaint</button>
+                )}
             </div>
         );
     }
