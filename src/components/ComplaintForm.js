@@ -1,10 +1,29 @@
 import React, { Component } from "react";
+import styled, { keyframes } from "styled-components";
+import FadeOut from "@bit/formidablelabs.react-animations.fade-out";
+import ZoomInDown from "@bit/formidablelabs.react-animations.zoom-in-down";
+import ZoomInUp from "@bit/formidablelabs.react-animations.zoom-in-up";
+const ZoomInUpAnimation = keyframes`${ZoomInUp}`;
+const ZoomInUpDiv = styled.div`
+  animation: 11s ${ZoomInUpAnimation};
+`;
+const ZoomInDownAnimation = keyframes`${ZoomInDown}`;
+const ZoomInDownDiv = styled.div`
+  animation: 11s ${ZoomInDownAnimation};
+`;
+const FadeOutAnimation = keyframes`${FadeOut}`;
+const FadeOutDiv = styled.div`
+  animation: 5s ${FadeOutAnimation};
+`;
 
 class ComplaintForm extends Component
 {
     state = {
         predictions: [],
+        showForm: true,
         showState: false,
+        showLoader: false,
+        timeOutnumber: 0,
         categories: [
             ["Stray Animals", "pets", "iconorange"],
             ["Electrical", "electrical_services", "iconcyansus"],
@@ -43,7 +62,8 @@ class ComplaintForm extends Component
                 this.setState(
                     {
                         predictions: res.labels,
-                        showState: true
+                        showLoader: true,
+                        showForm: false
                     }
                 );
                 console.log(res);
@@ -56,7 +76,8 @@ class ComplaintForm extends Component
         this.setState(
             {
                 predictions: [],
-                showState: false
+                showState: false,
+                showForm: true
             }
         );
 
@@ -70,6 +91,28 @@ class ComplaintForm extends Component
                 return (<span><i className="medium material-icons">{category[1]}</i> {category[0]}<br /></span>);
             }
         );
+
+        var allIconsDisplay;
+        if(this.state.showForm){
+            allIconsDisplay = this.state.categories.map(
+                category =>
+                {
+                    return (
+                        <div className="col s2">
+                            <div className="card z-depth-3 darken-1" style={{height: "100%", width: "100%"}}>
+                                <ul className="card-content collection with-header">
+                                    <li className = "collection-item center"><i className = {"material-icons medium " + category[2]} style={{fontSize: "3rem"}}>{category[1]}</i></li>
+                                    <li className="card-title collection-header center" style={{fontSize: "86%", padding: "0px"}}>{category[0]}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    );
+                }
+            );
+        }
+        else{
+            allIconsDisplay = null;
+        }
 
         var displayOutput;
 
@@ -97,10 +140,18 @@ class ComplaintForm extends Component
         {
             displayOutput = null;
         }
-
+        // if(this.state.showState) {
+        //     mapboxgl.accessToken = 'pk.eyJ1IjoicGVjbWFqb3Jwcm9qZWN0IiwiYSI6ImNraTM5ZGRzMzc4cjgydGw2am5henA5bnkifQ.VqHWgC1qta525a2xhlIGXg';
+        //     var map = new mapboxgl.Map({
+        //     container: 'map',
+        //     style: 'mapbox://styles/mapbox/streets-v11',
+        //     center: [-74.5, 40], // starting position [lng, lat]
+        //     zoom: 9 // starting zoom
+        //     });
+        // }
         return(
             <div className = "container center">
-                {!this.state.showState && (
+                {this.state.showForm && (
                 <div>
                 <h3>Complaint Form</h3>
                 <form onSubmit = {this.handleFormSubmit}>
@@ -137,13 +188,53 @@ class ComplaintForm extends Component
                 <br />
                 <br />
                 <br />
-                
+
                 <div className="row">
-                    {displayOutput}
+                {/* <FadeOutDiv> */}
+                    {allIconsDisplay} 
+                {/* </FadeOutDiv> */}
                 </div>
-                {this.state.showState && (
-                   <button class="btn waves-effect waves-light" onClick={this.handleButton}>Submit another Complaint</button>
+                
+                {this.state.showLoader && (
+                    <div>
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                  </svg>
+                  <div style={{visibility: "hidden"}}>
+                  {
+                   setTimeout( () => {
+                    this.setState(
+                        {
+                            showState: true,
+                            showLoader: false
+                        })
+                }, 2150)
+                  }
+                  </div>
+                  </div>
                 )}
+
+
+                <div className="row">
+                <ZoomInUpDiv>
+                     {displayOutput} 
+                </ZoomInUpDiv>
+                </div>
+
+                {this.state.showState && (
+                    <div className="row">
+                   <button class="btn waves-effect waves-light" onClick={this.handleButton}>Submit another Complaint</button>
+                   </div>
+                )}
+
+                {/* <br />
+                <br />
+
+                <div className="row">
+                    {allIconsDisplay} 
+                </div> */}
+               
             </div>
         );
     }
