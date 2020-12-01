@@ -5,15 +5,15 @@ import ZoomInDown from "@bit/formidablelabs.react-animations.zoom-in-down";
 import ZoomInUp from "@bit/formidablelabs.react-animations.zoom-in-up";
 const ZoomInUpAnimation = keyframes`${ZoomInUp}`;
 const ZoomInUpDiv = styled.div`
-  animation: 11s ${ZoomInUpAnimation};
+  animation: 12s ${ZoomInUpAnimation};
 `;
 const ZoomInDownAnimation = keyframes`${ZoomInDown}`;
 const ZoomInDownDiv = styled.div`
-  animation: 11s ${ZoomInDownAnimation};
+  animation: 15s ${ZoomInDownAnimation};
 `;
 const FadeOutAnimation = keyframes`${FadeOut}`;
 const FadeOutDiv = styled.div`
-  animation: 5s ${FadeOutAnimation};
+  animation: 10s ${FadeOutAnimation};
 `;
 
 class ComplaintForm extends Component
@@ -93,7 +93,7 @@ class ComplaintForm extends Component
         );
 
         var allIconsDisplay;
-        if(this.state.showForm){
+        if(!this.state.showState){
             allIconsDisplay = this.state.categories.map(
                 category =>
                 {
@@ -188,15 +188,9 @@ class ComplaintForm extends Component
                 <br />
                 <br />
                 <br />
-
-                <div className="row">
-                {/* <FadeOutDiv> */}
-                    {allIconsDisplay} 
-                {/* </FadeOutDiv> */}
-                </div>
                 
                 {this.state.showLoader && (
-                    <div>
+                    <div className={this.state.showLoader ? "fadeIn" : ""}>
                     <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
                     <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
                     <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
@@ -215,11 +209,20 @@ class ComplaintForm extends Component
                   </div>
                 )}
 
+                <div className="row">
+                <div className={this.state.showLoader ? "fadeOut" : ""}>
+                {/* <FadeOutDiv> */}
+                    {allIconsDisplay} 
+                {/* </FadeOutDiv> */}
+                </div>
+                </div>
 
                 <div className="row">
+                <div className={this.state.showState ? "fadeIn" : ""}>
                 <ZoomInUpDiv>
                      {displayOutput} 
                 </ZoomInUpDiv>
+                </div>
                 </div>
 
                 {this.state.showState && (
