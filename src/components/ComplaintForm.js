@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
-import FadeOut from "@bit/formidablelabs.react-animations.fade-out";
 import ZoomInDown from "@bit/formidablelabs.react-animations.zoom-in-down";
 import ZoomInUp from "@bit/formidablelabs.react-animations.zoom-in-up";
 const ZoomInUpAnimation = keyframes`${ZoomInUp}`;
@@ -10,10 +9,6 @@ const ZoomInUpDiv = styled.div`
 const ZoomInDownAnimation = keyframes`${ZoomInDown}`;
 const ZoomInDownDiv = styled.div`
   animation: 15s ${ZoomInDownAnimation};
-`;
-const FadeOutAnimation = keyframes`${FadeOut}`;
-const FadeOutDiv = styled.div`
-  animation: 10s ${FadeOutAnimation};
 `;
 
 class ComplaintForm extends Component
@@ -140,15 +135,7 @@ class ComplaintForm extends Component
         {
             displayOutput = null;
         }
-        // if(this.state.showState) {
-        //     mapboxgl.accessToken = 'pk.eyJ1IjoicGVjbWFqb3Jwcm9qZWN0IiwiYSI6ImNraTM5ZGRzMzc4cjgydGw2am5henA5bnkifQ.VqHWgC1qta525a2xhlIGXg';
-        //     var map = new mapboxgl.Map({
-        //     container: 'map',
-        //     style: 'mapbox://styles/mapbox/streets-v11',
-        //     center: [-74.5, 40], // starting position [lng, lat]
-        //     zoom: 9 // starting zoom
-        //     });
-        // }
+        
         return(
             <div className = "container center">
                 {this.state.showForm && (
@@ -211,9 +198,7 @@ class ComplaintForm extends Component
 
                 <div className="row">
                 <div className={this.state.showLoader ? "fadeOut" : ""}>
-                {/* <FadeOutDiv> */}
                     {allIconsDisplay} 
-                {/* </FadeOutDiv> */}
                 </div>
                 </div>
 
