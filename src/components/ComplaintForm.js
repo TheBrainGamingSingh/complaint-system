@@ -1,23 +1,37 @@
 import React, { Component } from "react";
+import styled, { keyframes } from "styled-components";
+import ZoomInDown from "@bit/formidablelabs.react-animations.zoom-in-down";
+import ZoomInUp from "@bit/formidablelabs.react-animations.zoom-in-up";
+const ZoomInUpAnimation = keyframes`${ZoomInUp}`;
+const ZoomInUpDiv = styled.div`
+  animation: 12s ${ZoomInUpAnimation};
+`;
+const ZoomInDownAnimation = keyframes`${ZoomInDown}`;
+const ZoomInDownDiv = styled.div`
+  animation: 15s ${ZoomInDownAnimation};
+`;
 
 class ComplaintForm extends Component
 {
     state = {
         predictions: [],
+        showForm: true,
         showState: false,
+        showLoader: false,
+        timeOutnumber: 0,
         categories: [
-            ["Encroachment", "follow_the_signs"],
-            ["Water Supply", "water_damage"],
-            ["Electrical", "electrical_services"],
-            ["Stray Animals", "pets"],
-            ["Roads", "add_road"],
-            ["Gardens" , "local_florist"],
-            ["Traffic", "traffic"],
-            ["Property Tax", "monetization_on"],
-            ["Health", "local_hospital"],
-            ["Building Permission", "location_city"],
-            ["Drainage", "waves"],
-            ["Garbage", "delete"]
+            ["Stray Animals", "pets", "iconorange"],
+            ["Electrical", "electrical_services", "iconcyansus"],
+            ["Gardens" , "local_florist", "iconyellow"],
+            ["Roads", "add_road", "iconmagenta"],
+            ["Building Permission", "location_city", "iconpurple"],
+            ["Water Supply", "water_damage", "iconblue"],
+            ["Encroachment", "follow_the_signs", "icondarkerorange"],
+            ["Drainage", "waves", "iconviolet"],
+            ["Traffic", "traffic", "iconred"],
+            ["Property Tax", "monetization_on", "iconlightgreen"],
+            ["Garbage", "delete", "icongrey"],
+            ["Health", "local_hospital", "icongreen"]
         ]
     };
 
@@ -28,8 +42,6 @@ class ComplaintForm extends Component
         var request = {
             query: document.getElementById("complaint").value
         };
-
-        console.log(request);
 
         fetch("/predict",
             {
@@ -45,12 +57,25 @@ class ComplaintForm extends Component
                 this.setState(
                     {
                         predictions: res.labels,
-                        showState: true
+                        showLoader: true,
+                        showForm: false
                     }
                 );
                 console.log(res);
             }
         );
+    }
+
+    handleButton = () =>
+    {
+        this.setState(
+            {
+                predictions: [],
+                showState: false,
+                showForm: true
+            }
+        );
+
     }
 
     render()
@@ -61,6 +86,28 @@ class ComplaintForm extends Component
                 return (<span><i className="medium material-icons">{category[1]}</i> {category[0]}<br /></span>);
             }
         );
+
+        var allIconsDisplay;
+        if(!this.state.showState){
+            allIconsDisplay = this.state.categories.map(
+                category =>
+                {
+                    return (
+                        <div className="col s2">
+                            <div className="card z-depth-3 darken-1" style={{height: "100%", width: "100%"}}>
+                                <ul className="card-content collection with-header">
+                                    <li className = "collection-item center"><i className = {"material-icons medium " + category[2]} style={{fontSize: "3rem"}}>{category[1]}</i></li>
+                                    <li className="card-title collection-header center" style={{fontSize: "86%", padding: "0px"}}>{category[0]}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    );
+                }
+            );
+        }
+        else{
+            allIconsDisplay = null;
+        }
 
         var displayOutput;
 
@@ -74,7 +121,7 @@ class ComplaintForm extends Component
                         <div className="col s4">
                             <div className="card z-depth-3 darken-1">
                                 <ul className="card-content collection with-header">
-                                    <li className = "collection-item center"><i className = "material-icons medium">{this.state.categories[label.id][1]}</i></li>
+                                    <li className = "collection-item center"><i className = {"material-icons medium " + this.state.categories[label.id][2]}>{this.state.categories[label.id][1]}</i></li>
                                     <li className="card-title collection-header center">{label.category}</li>
                                     <li className = "collection-item center">Confidence: {Math.round((confidence + Number.EPSILON)*100)/100}%</li>
                                 </ul>
@@ -88,9 +135,11 @@ class ComplaintForm extends Component
         {
             displayOutput = null;
         }
-
+        
         return(
             <div className = "container center">
+                {this.state.showForm && (
+                <div>
                 <h3>Complaint Form</h3>
                 <form onSubmit = {this.handleFormSubmit}>
                     <div className = "row container">
@@ -121,13 +170,59 @@ class ComplaintForm extends Component
                     </div>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Submit Complaint</button>
                 </form>
+                </div>
+                )}
                 <br />
                 <br />
                 <br />
                 
+                {this.state.showLoader && (
+                    <div className={this.state.showLoader ? "fadeIn" : ""}>
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                  </svg>
+                  <div style={{visibility: "hidden"}}>
+                  {
+                   setTimeout( () => {
+                    this.setState(
+                        {
+                            showState: true,
+                            showLoader: false
+                        })
+                }, 2150)
+                  }
+                  </div>
+                  </div>
+                )}
+
                 <div className="row">
-                    {displayOutput}
+                <div className={this.state.showLoader ? "fadeOut" : ""}>
+                    {allIconsDisplay} 
                 </div>
+                </div>
+
+                <div className="row">
+                <div className={this.state.showState ? "fadeIn" : ""}>
+                <ZoomInUpDiv>
+                     {displayOutput} 
+                </ZoomInUpDiv>
+                </div>
+                </div>
+
+                {this.state.showState && (
+                    <div className="row">
+                   <button class="btn waves-effect waves-light" onClick={this.handleButton}>Submit another Complaint</button>
+                   </div>
+                )}
+
+                {/* <br />
+                <br />
+
+                <div className="row">
+                    {allIconsDisplay} 
+                </div> */}
+               
             </div>
         );
     }
